@@ -1,0 +1,50 @@
+#  madaline.net
+
+SNNS network definition file V1.4-3D
+generated at Tue Nov 20 17:15:02 2001
+
+network name : madaline
+source files :
+no. of units : 7
+no. of connections : 8
+no. of unit types : 0
+no. of site types : 0
+
+
+learning function : Std_Backpropagation
+update function   : Topological_Order
+
+
+unit default section :
+
+act      | bias     | st | subnet | layer | act func     | out func
+---------|----------|----|--------|-------|--------------|-------------
+ 0.00000 |  0.00000 | h  |      0 |     1 | Act_Logistic | Out_Identity 
+---------|----------|----|--------|-------|--------------|-------------
+
+
+unit definition section :
+
+no. | typeName | unitName | act      | bias     | st | position | act func
+| out func | site
+----|----------|----------|----------|----------|----|----------|----------------------|----------|-------
+  1 |          | X1       |  0.00000 |  0.00000 | i  |  2, 2,-6136 | Act_Identity         |          | 
+  2 |          | X2       |  0.00000 |  0.00000 | i  |  2, 3,-6136 | Act_Identity         |          | 
+  3 |          | NET_A    |  0.00000 |  0.00000 | h  |  5, 2,-6136 | Act_IdentityPlusBias |          | 
+  4 |          | NET_B    |  0.00000 |  0.00000 | h  |  5, 3,-6136 | Act_IdentityPlusBias |          | 
+  5 |          | A        |  0.00000 |  0.00000 | sh  |  8, 2,-6136 | Act_Signum           |          | 
+  6 |          | B        |  0.00000 |  0.00000 | sh  |  8, 3,-6136 | Act_Signum           |          | 
+  7 |          | CLASSE   |  0.00000 |  0.00000 | so  | 11, 2,-6136 | Act_Signum           |          | 
+----|----------|----------|----------|----------|----|----------|----------------------|----------|-------
+
+
+connection definition section :
+
+target | site | source:weight
+-------|------|------------------------------------------------------------------------------------------------------------
+     3 |      | 1: 0.00000, 2: 0.00000
+     4 |      | 1: 0.00000, 2: 0.00000
+     5 |      | 3: 0.00000
+     6 |      | 4: 0.00000
+     7 |      | 5: 0.00000, 6: 0.00000
+-------|------|------------------------------------------------------------------------------------------------------------

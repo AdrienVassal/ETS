@@ -45,3 +45,16 @@ end
 C = series(series(series(k1*H, J1),J2),J3);
 % Définition de la boucle ouverte
 J = series(C,P);
+% Affichage des performances temporelles du correcteur
+step(C);
+% Affichage des performances frequentielles de la boucle ouverte
+
+figure(1);
+grid on;
+margin(J);
+figure(2);
+grid on;
+nyquist(J);
+figure(3);
+grid on;
+nichols(J);

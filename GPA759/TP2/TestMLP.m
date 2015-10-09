@@ -57,28 +57,28 @@ Y      = zeros(size(X,1),4);
 MSE    = zeros(nEpoch,4);
 % Ajustement pour full = 0 et random = 0
 tic;
-[MLP1, MSE(:,1), Y(:,1)] = Training( MLP, X, D, eta, nEpoch, 0, 0 );
+[MLP1, MSE(:,1), Y(:,1)] = TrainingOLD( MLP, X, D, eta, nEpoch, 0, 0 );
 display('Temps d''entrainnement dans le cas full = 0 et random = 0');
 toc;
 display(' ');
 
 % Ajustement pour full = 1 et random = 0
 tic;
-[MLP2, MSE(:,2), Y(:,2)] = Training( MLP, X, D, eta, nEpoch, 1, 0 );
+[MLP2, MSE(:,2), Y(:,2)] = TrainingOLD( MLP, X, D, eta, nEpoch, 1, 0 );
 display('Temps d''entrainnement dans le cas full = 1 et random = 0');
 toc;
 display(' ');
 
 % Ajustement pour full = 0 et random = 1
 tic;
-[MLP3, MSE(:,3), Y(:,3)] = Training( MLP, X, D, eta, nEpoch, 0, 1 );
+[MLP3, MSE(:,3), Y(:,3)] = TrainingOLD( MLP, X, D, eta, nEpoch, 0, 1 );
 display('Temps d''entrainnement dans le cas full = 0 et random = 1');
 toc;
 display(' ');
 
 % Ajustement pour full = 1 et random = 1
 tic;
-[MLP4, MSE(:,4), Y(:,4)] = Training( MLP, X, D, eta, nEpoch, 1, 1 );
+[MLP4, MSE(:,4), Y(:,4)] = TrainingOLD( MLP, X, D, eta, nEpoch, 1, 1 );
 display('Temps d''entrainnement dans le cas full = 1 et random = 1');
 toc;
 display(' ');

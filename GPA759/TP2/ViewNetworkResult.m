@@ -32,7 +32,4 @@ for i = 1 : size(MLP,1)
     title(['image de sortie seuillée' num2str(i)]);
 end
 
-
-
-
 end

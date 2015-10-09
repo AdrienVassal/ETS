@@ -1,4 +1,4 @@
-function [MLP, MSE, Y] = Training( MLP, X, D, eta, nEpoch, full, random )
+function [MLP, MSE, Y] = TrainingBis( MLP, X, D, eta, nEpoch, batchSize)
 %TRAINING : entraine un réseau de neurones MLP, avec les data X, durant
 %nEpoch époque selon le le type d'entrainement désiré.
 %   Training(MLP, nbE, full, random)
@@ -8,51 +8,39 @@ function [MLP, MSE, Y] = Training( MLP, X, D, eta, nEpoch, full, random )
 %   D      : Les données de sorties du set d'entrainement
 %   eta    : valeur de la constante d'apprentissage
 %   nEpoch : Le nombre d'époque à réaliser
-%   full   : Boolean 1 = apprentissage sur le set complet, 0 = apprentissage
-%   par exmple du set
-%   random : Boolean 1 = sélection des données du set d'entrainement dans
-%   un ordre aléatoire, 0 = sélection des données du set d'entrainement
-%   dans l'ordre déjà établi.
+%   batchSize  : Taille des lots d'entrainement.
+%   Si batchSize = 1, cela consiste à entrainer le réseau élément par
+%   élément.
+%   Si batchSize = size(X,1), cela consiste à entrainer le réseau sur tout
+%   le set de data X
+%
+%   NB : toutes les données sont mélangées quelque soit la taille des lots
 
-    % Initialisation du vecteur de l'erreur quadratique moyenne
-    MSE = zeros(1,nEpoch);
+% Initialisation du vecteur de l'erreur quadratique moyenne
+MSE            = zeros(1,nEpoch);
+[X, D, Xr, Dr] = CreateBatch(X,D,batchSize);
 
-    if random
-        getIdx = @(X) randperm(size(X,1));
-    else
-        getIdx = @(X) (1:size(X,1));
+for ep = 1:nEpoch
+    % Initialisation
+    % Rétropropagation par exemple
+    for i = 1:floor(size(X,1)/batchSize)
+        % obtenir les ajustement pour une donnée par rétropropagation
+        [adjW_s,adjW_c] = MLP.retroPropagation(X((i-1)*batchSize+1:i*batchSize,:),...
+            D((i-1)*batchSize+1:i*batchSize),eta);
+        % Correction
+        MLP.W_c = MLP.W_c + adjW_c;
+        MLP.W_s = MLP.W_s + adjW_s;
     end
-
-    if full
-        for ep = 1:nEpoch
-            % Initialisation
-            idx             = getIdx(X);
-            % Rétropropagation sur le set complet
-            [adjW_s,adjW_c] = MLP.retroPropagation(X(idx,:),D(idx,:),eta);
-            % Correction
-            MLP.W_c         = MLP.W_c + adjW_c;
-            MLP.W_s         = MLP.W_s + adjW_s;
-            % Calcul du résultat
-            Y       = MLP.propagation(X)>0.5;
-            % Calculer l'erreur quadratique moyenne et l'ajouter au vecteur
-            MSE(ep) = sum(((D-Y).^2))/size(X,1);
-        end
-    else
-        for ep = 1:nEpoch
-            % Initialisation
-            idx = getIdx(X);        
-            % Rétropropagation par exemple
-            for i = 1:length(idx)
-                % obtenir les ajustement pour une donnée par rétropropagation
-                [adjW_s,adjW_c] = MLP.retroPropagation(X(idx(i),:),D(idx(i),:),eta);
-                % Correction
-                MLP.W_c = MLP.W_c + adjW_c;
-                MLP.W_s = MLP.W_s + adjW_s;
-            end
-            % Calcul du résultat
-            Y       = MLP.propagation(X)>0.5;
-            % Calculer l'erreur quadratique moyenne et l'ajouter au vecteur
-            MSE(ep) = sum(((D-Y).^2))/size(X,1);
-        end
+    % Rajout des restes
+    if ~isempty(Xr)
+    [adjW_s,adjW_c] = MLP.retroPropagation(Xr, Dr ,eta);
+    MLP.W_c = MLP.W_c + adjW_c;
+    MLP.W_s = MLP.W_s + adjW_s;
     end
+    % Calcul du résultat
+    Y       = MLP.propagation([X;Xr])>0.5;
+    % Calculer l'erreur quadratique moyenne et l'ajouter au vecteur
+    MSE(ep) = sum((([D;Dr]-Y).^2))/size([X;Xr],1);
+end
+
 end

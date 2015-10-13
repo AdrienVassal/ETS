@@ -37,7 +37,9 @@ Htu3 = c2d(H,Te(3),'tustin');
 %-------------------------------------------------------------------------%
 % d) Mathématique
 %-------------------------------------------------------------------------%
-
+Hmat1 = tf([1-exp(-10*Te(1)) 0],[1 -exp(-10*Te(1))],Te(1));
+Hmat2 = tf([1-exp(-10*Te(2)) 0],[1 -exp(-10*Te(2))],Te(2));
+Hmat3 = tf([1-exp(-10*Te(3)) 0],[1 -exp(-10*Te(3))],Te(3));
 %-------------------------------------------------------------------------%
 % Time response
 %-------------------------------------------------------------------------%
@@ -60,6 +62,11 @@ step(H,Htu1,Htu2,Htu3);
 title('Step response for Tustin discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
+
+subplot(2,2,4);
+step(H,Hmat1,Hmat2,Hmat3);
+title('Step response for mathematical discretisation');
+legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 %-------------------------------------------------------------------------%
 % Frequency response
 %-------------------------------------------------------------------------%
@@ -81,4 +88,9 @@ legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 subplot(2,2,3);
 bode(H,Htu1,Htu2,Htu3);
 title('Bode response for Tustin discretisation');
+legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
+
+subplot(2,2,4);
+bode(H,Htu1,Htu2,Htu3);
+title('Bode response for mathematical discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');

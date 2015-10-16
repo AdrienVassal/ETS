@@ -24,16 +24,24 @@ Hbw3        = tf([1 0],[11 -10],Te(3));
 %-------------------------------------------------------------------------%
 % c) Forward
 %-------------------------------------------------------------------------%
-Hfw1 = c2d(H,Te(1),'zoh');
-Hfw2 = c2d(H,Te(2),'zoh');
-Hfw3 = c2d(H,Te(3),'zoh');
+s           = (z-1)/(Te(1));
+simplifyFraction(10/(10+s));
+Hfw1        = tf([0 1],[1 0],Te(1));
+
+s           = (z-1)/(Te(2));
+simplifyFraction(10/(10+s));
+Hfw2        = tf([0 1],[2 -1],Te(2));
+    
+s           = (z-1)/(Te(3));
+simplifyFraction(10/(10+s));
+Hfw3        = tf([0 1],[10 -9],Te(3));
+
 %-------------------------------------------------------------------------%
 % d) Tustin
 %-------------------------------------------------------------------------%
 Htu1 = c2d(H,Te(1),'tustin');
 Htu2 = c2d(H,Te(2),'tustin');
 Htu3 = c2d(H,Te(3),'tustin');
-
 %-------------------------------------------------------------------------%
 % d) Mathématique
 %-------------------------------------------------------------------------%
@@ -46,26 +54,26 @@ Hmat3 = tf([1-exp(-10*Te(3)) 0],[1 -exp(-10*Te(3))],Te(3));
 
 figure;
 subplot(2,2,1);
-step(H,Hbw1,Hbw2,Hbw3);
-title('Step response for backward discretisation');
+impulse(H,Hbw1,Hbw2,Hbw3);
+title('impulse response for backward discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
 
 subplot(2,2,2);
-step(H,Hfw1,Hfw2,Hfw3);
-title('Step response for forward discretisation');
+impulse(H,Hfw1,Hfw2,Hfw3);
+title('impulse response for forward discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
 
 subplot(2,2,3);
-step(H,Htu1,Htu2,Htu3);
-title('Step response for Tustin discretisation');
+impulse(H,Htu1,Htu2,Htu3);
+title('impulse response for Tustin discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
 
 subplot(2,2,4);
-step(H,Hmat1,Hmat2,Hmat3);
-title('Step response for mathematical discretisation');
+impulse(H,Hmat1,Hmat2,Hmat3);
+title('impulse response for mathematical discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 %-------------------------------------------------------------------------%
 % Frequency response

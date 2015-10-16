@@ -31,10 +31,25 @@ for i=1:4
 end
 
 figure;
-for i=5:8
+for i=5:7
     subplot(2,2,i-4);
     bode(H(i));
 end
+
+% Cas -s+1 : il faut corriger la phase
+[mag,phase,wout] = bode(H(8));
+mag   = squeeze(mag);
+phase = squeeze(phase)-360;
+figure;
+subplot(2,1,1);
+semilogx(wout,mag);
+title('Bode diagramme');
+xlabel('w');
+ylabel('mag');
+subplot(2,1,2);
+semilogx(wout,phase);
+xlabel('w');
+ylabel('phase');
 
 figure;
 for i=9:12

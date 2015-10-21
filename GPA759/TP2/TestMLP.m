@@ -53,46 +53,14 @@ view   = view.plotState(X,D,Y);
 % Données
 eta    = 0.1; % constante d'apprentissage
 nEpoch = 400; % nombre de d'époques d'entrainement
-Y      = zeros(size(X,1),4);
-MSE    = zeros(nEpoch,4);
+
 % Ajustement pour full = 0 et random = 0
 tic;
-[MLP1, MSE(:,1), Y(:,1)] = TrainingOLD( MLP, X, D, eta, nEpoch, 0, 0 );
-display('Temps d''entrainnement dans le cas full = 0 et random = 0');
-toc;
-display(' ');
-
-% Ajustement pour full = 1 et random = 0
-tic;
-[MLP2, MSE(:,2), Y(:,2)] = TrainingOLD( MLP, X, D, eta, nEpoch, 1, 0 );
-display('Temps d''entrainnement dans le cas full = 1 et random = 0');
-toc;
-display(' ');
-
-% Ajustement pour full = 0 et random = 1
-tic;
-[MLP3, MSE(:,3), Y(:,3)] = TrainingOLD( MLP, X, D, eta, nEpoch, 0, 1 );
-display('Temps d''entrainnement dans le cas full = 0 et random = 1');
-toc;
-display(' ');
-
-% Ajustement pour full = 1 et random = 1
-tic;
-[MLP4, MSE(:,4), Y(:,4)] = TrainingOLD( MLP, X, D, eta, nEpoch, 1, 1 );
-display('Temps d''entrainnement dans le cas full = 1 et random = 1');
+[MLP, MSE, Y] = Training( MLP, X, D, eta, nEpoch, size(X,1));
+display('Temps d''entrainnement:');
 toc;
 display(' ');
 
 % % Afficahge des données
-[minMSE, idx] =  min(MSE(end,:));
- view = view.plotState(X,D,Y(:,idx));% afficher la classification dans le meilleur cas
- view = view.plotMSE(MSE(:,idx));    % afficher l'erreur dans le meilleur cas
- 
- % Comparaison de l'erreur
- figure(2)
- plot(repmat((1:nEpoch)',1,4),MSE,'LineWidth',2);
- xlabel('nombre d''époque');
- ylabel('Valeur de l''erreur');
- title('MSE');
- legend('full = 0, random = 0','full = 1, random = 0','full = 0, random = 1','full = 1, random = 1');
- 
+ view = view.plotState(X,D,Y);% afficher la classification 
+ view = view.plotMSE(MSE);    % afficher l'erreur

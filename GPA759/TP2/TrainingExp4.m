@@ -1,4 +1,4 @@
-function [MLP, MSE, Y, MLPgood] = TrainingExp4( MLP, X, D, eta, nEpoch, full, random )
+function [MLP, MSE, Y, MLPgood] = TrainingExp4( MLP, X, D, Xv, Dv, eta, nEpoch, full, random)
 %TRAINING : entraine un réseau de neurones MLP, avec les data X, durant
 %nEpoch époque selon le le type d'entrainement désiré.
 %   Training(MLP, nbE, full, random)
@@ -6,6 +6,8 @@ function [MLP, MSE, Y, MLPgood] = TrainingExp4( MLP, X, D, eta, nEpoch, full, ra
 %   MLP    : objet contenant le réseau MPL déjà initialisé
 %   X      : Les données d'entrées set d'entrainement
 %   D      : Les données de sorties du set d'entrainement
+%   Xv     : Les données d'entrées set de validation
+%   Dv     : Les données de sorties du de validation
 %   eta    : valeur de la constante d'apprentissage
 %   nEpoch : Le nombre d'époque à réaliser
 %   full   : Boolean 1 = apprentissage sur le set complet, 0 = apprentissage
@@ -14,8 +16,10 @@ function [MLP, MSE, Y, MLPgood] = TrainingExp4( MLP, X, D, eta, nEpoch, full, ra
 %   un ordre aléatoire, 0 = sélection des données du set d'entrainement
 %   dans l'ordre déjà établi.
 
-    % Booléen pour trouver le modèle suffisement entrainné
+
+    % Booléen pour savoir si le modèle suffisement entrainné
     reach = 0;
+    
     % Initialisation du vecteur de l'erreur quadratique moyenne
     MSE = zeros(2,nEpoch);
 
@@ -35,17 +39,18 @@ function [MLP, MSE, Y, MLPgood] = TrainingExp4( MLP, X, D, eta, nEpoch, full, ra
             MLP.W_c         = MLP.W_c + adjW_c;
             MLP.W_s         = MLP.W_s + adjW_s;
             % Calcul du résultat
-            Y       = MLP.propagation(X)>0.5;
-
+            Y       = MLP.propagation(X);
+            Yv       = MLP.propagation(Xv);
             % Calculer l'erreur quadratique moyenne et l'ajouter au vecteur
             MSE(1,ep) = sum(((D-Y).^2))/size(X,1);
-            
+            MSE(2,ep) = sum(((Dv-Yv).^2))/size(Xv,1);           
             % Trouver le modèle suffisament entrainné
-            if MSE(1,ep)< 0.05 && reach == 0
-                MLPgood = MLP;
-                reach = 1;
+            if ep > 200 && reach == 0
+                if MSE(2,ep)> MSE(2,ep-1)
+                    MLPgood = MLP;
+                    reach = 1;
+                end
             end
-
         end
     else
         for ep = 1:nEpoch
@@ -60,17 +65,18 @@ function [MLP, MSE, Y, MLPgood] = TrainingExp4( MLP, X, D, eta, nEpoch, full, ra
                 MLP.W_s = MLP.W_s + adjW_s;
             end
             % Calcul du résultat
-            Y       = MLP.propagation(X)>0.5;
-
+            Y       = MLP.propagation(X);
+            Yv       = MLP.propagation(Xv);
             % Calculer l'erreur quadratique moyenne et l'ajouter au vecteur
             MSE(1,ep) = sum(((D-Y).^2))/size(X,1);
-            
+            MSE(2,ep) = sum(((Dv-Yv).^2))/size(Xv,1);           
             % Trouver le modèle suffisament entrainné
-            if MSE(1,ep)< 0.05 && reach == 0
-                MLPgood = MLP;
-                reach = 1;
+            if ep > 200 && reach == 0
+                if MSE(2,ep)> MSE(2,ep-1)               
+                    MLPgood = MLP;
+                    reach = 1;
+                end
             end
-
         end
     end
 end

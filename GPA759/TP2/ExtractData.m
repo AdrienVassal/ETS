@@ -1,10 +1,10 @@
-function [X, D, Xval, Dval] = ExtractData(patchSize,step,minDist)
+function [X, D] = ExtractData(path,patchSize,step,minDist)
 %EXTRACTDATA : extraction des données des images avec entrée et sortie
-%désirée associée.
-%La matrice X est une matrice composé de niveau de gris de l'image
-extraireVecteursdesImages('images\Training\',patchSize,step)
-extraireVecteursdesImages('images\Validation\',patchSize,step)
-extraireVecteursdesImages('images\Test\',patchSize,step)
-[X,D] = selectionDesExemples('images\Training\', minDist);
-[Xval,Dval] = selectionDesExemples('images\Validation\', 0);
+
+% path: contient le chemin d'accès au répertoire d'images
+% patchSize: dimension de l'imagette (patchSize x patchSize)
+% step: distance entre les imagettes extraites
+% minDist: distance euclédienne minimal entre les exemples
+extraireVecteursdesImages(path,patchSize,step);
+[X,D] = selectionDesExemples(path, minDist);
 end

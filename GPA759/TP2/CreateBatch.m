@@ -1,5 +1,20 @@
 function [X, D, Xr, Dr] = CreateBatch (X, D, batchSize)
-% On dÃ©finie les proportions
+%CREATEBATCH(X, D, batchSize) : création de batch à partir de données
+%d'entrée en faisant en sorte de respecter les propotion de données à 0 et
+%à 1 dans le vecteur totale.
+% CreateBatch(X, D, batchSize)
+%   X : Les données d'entrées à diviser en batch
+%   D : Les données de sortie qui vont définir les proportions de 0 et 1
+%   batchSize : la taille des batch désirés
+%
+% Paramètres de sortie
+%   X : L'ensemble des batch créés concaténé les un à la suite des autres
+%   D : Les données de sortie correspondant au batch
+%   Xr : Le reste des données de sorite, ce qui n'a pas put être classer
+%   dans un batch
+%   Dr : Les données de sorte correspondant au reste.
+%%
+% On définie les proportions
 P1 = floor(batchSize*sum(D)/size(D,1)); % Proportion de 1
 P0 = batchSize-P1;                      % Proportion de 0
 
@@ -10,9 +25,6 @@ I1 = randperm(length(find( D, size(X,1)))); % Index random de D = 1
 % On applique le melange aux entres
 X0 = X(I0,:); % X = 0 random
 X1 = X(I1,:); % X = 1 random
-
-
-
 %% CrÃ©ation des Ã©chantillons
 
 % nombre de lot bien proportionné que l'on peut construire
@@ -21,7 +33,7 @@ nbBatch           = min(floor(size(X0,1)/P0),...
 % Vecteur contenant les retes inclassable dans les lots
 Xr       = [];
 Dr       = [];
-if nbBatch >1
+if nbBatch >1 % Cas ou il n'y a qu'un batch, inutile de faire la suite
     % Initialisation : création du premier lot
     X(1:P1,:)       = X1(1:P1,:);
     D(1:P1)         = 1;
@@ -42,7 +54,7 @@ if nbBatch >1
         D(i*batchSize+P1+1:i*batchSize+P0+P1)   = 0;
         
         % Melange des cas dans le lot
-        idx = i*batchSize+1+randperm(batchSize);
+        idx = i*batchSize+randperm(batchSize);
         X(i*batchSize+1:i*batchSize+P0+P1,:)    = X(idx,:);
         D(i*batchSize+1:i*batchSize+P0+P1)      = D(idx,:);
     end

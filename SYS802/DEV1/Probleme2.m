@@ -45,34 +45,34 @@ Htu3 = c2d(H,Te(3),'tustin');
 %-------------------------------------------------------------------------%
 % d) Mathématique
 %-------------------------------------------------------------------------%
-Hmat1 = tf([1-exp(-10*Te(1)) 0],[1 -exp(-10*Te(1))],Te(1));
-Hmat2 = tf([1-exp(-10*Te(2)) 0],[1 -exp(-10*Te(2))],Te(2));
-Hmat3 = tf([1-exp(-10*Te(3)) 0],[1 -exp(-10*Te(3))],Te(3));
+Hmat1 = tf([10 0],[1 -exp(-10*Te(1))],Te(1));
+Hmat2 = tf([10 0],[1 -exp(-10*Te(2))],Te(2));
+Hmat3 = tf([10 0],[1 -exp(-10*Te(3))],Te(3));
 %-------------------------------------------------------------------------%
 % Time response
 %-------------------------------------------------------------------------%
 
 figure;
 subplot(2,2,1);
-impulse(H,Hbw1,Hbw2,Hbw3);
+impulse(H,Hbw1,Hbw2,Hbw3,1);
 title('impulse response for backward discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
 
 subplot(2,2,2);
-impulse(H,Hfw1,Hfw2,Hfw3);
+impulse(H,Hfw1,Hfw2,Hfw3,1);
 title('impulse response for forward discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
 
 subplot(2,2,3);
-impulse(H,Htu1,Htu2,Htu3);
+impulse(H,Htu1,Htu2,Htu3,1);
 title('impulse response for Tustin discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 
 
 subplot(2,2,4);
-impulse(H,Hmat1,Hmat2,Hmat3);
+impulse(H,Te(1)*Hmat1,Te(2)*Hmat2,Te(3)*Hmat3,1);
 title('impulse response for mathematical discretisation');
 legend('Continuous','Te = 0.1','Te = 0.05','Te = 0.01');
 %-------------------------------------------------------------------------%

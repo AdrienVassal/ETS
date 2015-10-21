@@ -1,4 +1,4 @@
-function [MLP, MSE, Y] = TrainingBis( MLP, X, D, eta, nEpoch, batchSize)
+function [MLP, MSE, Y] = Training( MLP, X, D, eta, nEpoch, batchSize)
 %TRAINING : entraine un réseau de neurones MLP, avec les data X, durant
 %nEpoch époque selon le le type d'entrainement désiré.
 %   Training(MLP, nbE, full, random)
@@ -26,7 +26,7 @@ for ep = 1:nEpoch
     for i = 1:floor(size(X,1)/batchSize)
         % obtenir les ajustement pour une donnée par rétropropagation
         [adjW_s,adjW_c] = MLP.retroPropagation(X((i-1)*batchSize+1:i*batchSize,:),...
-            D((i-1)*batchSize+1:i*batchSize),eta);
+            D((i-1)*batchSize+1:i*batchSize,:),eta);
         % Correction
         MLP.W_c = MLP.W_c + adjW_c;
         MLP.W_s = MLP.W_s + adjW_s;
@@ -38,7 +38,7 @@ for ep = 1:nEpoch
     MLP.W_s = MLP.W_s + adjW_s;
     end
     % Calcul du résultat
-    Y       = MLP.propagation([X;Xr])>0.5;
+    Y       = MLP.propagation([X;Xr]);
     % Calculer l'erreur quadratique moyenne et l'ajouter au vecteur
     MSE(ep) = sum((([D;Dr]-Y).^2))/size([X;Xr],1);
 end

@@ -13,7 +13,7 @@ nEpoch = 1;
 X      = [1 2];
 D      = [1 0];
 % Entrainement pour une époque
-[MLP, MSE, Y] = Training( MLP, X, D, eta, nEpoch, 0, 0 );
+[MLP, MSE, Y] = Training( MLP, X, D, eta, nEpoch, 1);
 
 MLP.W_c
 MLP.W_s

@@ -1,15 +1,13 @@
 clear;clc;close all
 %% Paramètres
-patchSize = 3;
-batchSize = 45;
+patchSize = 3; 
 step      = 8;
 minDist   = 0.8;
-eta       = [0.001 0.01 0.1 1];
+eta       = (0.02:0.01:0.08);
 nEpoch    = 5000;
 %% Création des bases de données
-[X,D,Xval,Dval] = ExtractData(patchSize,step,minDist);
-%[X,D]           = ExtendData(X,D,'symlr','symud'); % Augmentation artificielle du nombre d'entrée
-% Blanchir les données si nécessaire
+[X,D]     = ExtractData('images\Training\',patchSize,step,minDist);
+batchSize = size(X,1);
 %% Création du réseau de neurones
 MLP     = myMLP;
 MLP     = MLP.initialisation(9,5,1);
@@ -21,7 +19,8 @@ Y      = zeros(size(X,1),length(eta));
 
 for i = 1 : length(eta);
     tic;
-    [MLPExp1(i), MSE(:,i), Y(:,i)] = TrainingBis( MLP, X, D, eta(i), nEpoch, batchSize );
+    [MLPExp1(i), MSE(:,i), Y(:,i)] = Training( MLP, X, D, eta(i),...
+                                                  nEpoch, batchSize );
     ledg{i} = strcat('eta = ', num2str(eta(i)));
     display(['Temps pour eta = ', num2str(eta(i))]);
     toc;
@@ -35,5 +34,6 @@ xlabel('nombre d''époque');
 ylabel('Valeur de l''erreur');
 legend(ledg);
 title('MSE');
-%% Utiliser le réseau
+
+%% Visulaliser le résultat
 ViewNetworkResult(MLPExp1, patchSize);

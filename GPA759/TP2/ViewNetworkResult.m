@@ -12,11 +12,12 @@ fileName = 'roo';
 
 mX = dlmread(['images/Test/' fileName '.mx']);
 figure;
+subplot(1,2,1);
 imshow(mX);
 title('image originale');
 
 mD = dlmread(['images/Test/' fileName '.md']);
-figure;
+subplot(1,2,2);
 imshow(mD);
 title('image désirée');
 

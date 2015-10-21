@@ -18,9 +18,9 @@ for i = 1:length(allFiles)
     
     % obtenir les vecteurs contenus dans les fichiers
     fileName = [path allFiles(i).name];
-    vX = dlmread(fileName);
+    vX       = dlmread(fileName);
     fileName = strrep(fileName,'.vx','.vd');
-    vD = dlmread(fileName);
+    vD       = dlmread(fileName);
     
     % regarder les vecteurs un par un et les ajouter s'il sont assez
     % différents de ceux déjà dans X
@@ -34,8 +34,7 @@ for i = 1:length(allFiles)
                 addIt = false;
                 break;
             end
-        end
-        
+        end     
         % si différent de tous les autres, on ajoute
         if addIt
             X = [X;vX(j,:)];
@@ -44,9 +43,4 @@ for i = 1:length(allFiles)
     end
     
 end
-
-
-
-
-
 end

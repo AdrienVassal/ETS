@@ -17,7 +17,6 @@ for i = 1:length(allFiles)
     
     % lire l'image
     xM = imread([path allFiles(i).name]);
-    
     % convertir en tons de gris si l'image est en couleur
     if size(xM,3)>1
         xM = rgb2gray(xM);
@@ -75,9 +74,7 @@ for i = 1:length(allFiles)
     % Sauvegarder les valeurs désirées dans un fichier
     newFileName = [path allFiles(i).name];
     newFileName = strrep(lower(newFileName),'tif','vd');
-    dlmwrite(newFileName,D)
-    
-    
+    dlmwrite(newFileName,D)   
 end
 
 end

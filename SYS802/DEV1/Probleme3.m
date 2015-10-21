@@ -1,9 +1,7 @@
 clear;close all;clc;
-%% TO DO : faire un zoom sur le dépassement dans la dernière TF
-% Retrancher 360° a la phase pour H(8)
-% Titre de chacun des graphiques
+%%
 
-
+% Défnition des fonctions de transfert
 H(1)   = tf([0 1],[1  1]);
 H(2)   = tf([0 1],[1 -1]);
 H(3)   = -H(1);
@@ -24,41 +22,39 @@ H(14) = tf([0 0 1],[1 2   1]);
 H(15) = tf([0 0 1],[1 1.6 1]);
 H(16) = tf([0 0 1],[1 1   1]);
 
+
+% Affichage des diagrammes de Bode
 figure;
 for i=1:4
     subplot(2,2,i);
     bode(H(i));
+    title(['Bode de la fonction H' num2str(i) '(s)']);
 end
 
 figure;
-for i=5:7
+for i=5:8
     subplot(2,2,i-4);
     bode(H(i));
+    title(['Bode de la fonction H' num2str(i) '(s)']);
 end
 
 % Cas -s+1 : il faut corriger la phase
 [mag,phase,wout] = bode(H(8));
-mag   = squeeze(mag);
 phase = squeeze(phase)-360;
-figure;
-subplot(2,1,1);
-semilogx(wout,mag);
-title('Bode diagramme');
-xlabel('w');
-ylabel('mag');
-subplot(2,1,2);
-semilogx(wout,phase);
-xlabel('w');
-ylabel('phase');
+axes  = gca;
+set(axes.Children(1).Children,'XData',wout,'YData',phase)
+axes.YLim = [-90 0];
 
 figure;
 for i=9:12
     subplot(2,2,i-8);
     bode(H(i));
+    title(['Bode de la fonction H' num2str(i) '(s)']);
 end
 
 figure;
 for i=13:16
     subplot(2,2,i-12);
     bode(H(i));
+    title(['Bode de la fonction H' num2str(i) '(s)']);
 end

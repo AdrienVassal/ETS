@@ -25,7 +25,7 @@ tic;
 toc;
 %Afficher le MSE pour les bases entrainnement et validations
 hold on
-for(i=1:2)
+for i=1:2
     plot(MSE(i,:),'LineWidth',2);
 end
 legend('MSE base entrainement','MSE base validation');

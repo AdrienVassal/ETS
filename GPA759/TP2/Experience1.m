@@ -3,7 +3,7 @@ clear;clc;close all
 patchSize = 3; 
 step      = 8;
 minDist   = 0.8;
-eta       = (0.02:0.01:0.08);
+eta       = 0.05;
 nEpoch    = 5000;
 %% Création des bases de données
 [X,D]     = ExtractData('images\Training\',patchSize,step,minDist);
@@ -20,7 +20,7 @@ Y      = zeros(size(X,1),length(eta));
 for i = 1 : length(eta);
     tic;
     [MLPExp1(i), MSE(:,i), Y(:,i)] = Training( MLP, X, D, eta(i),...
-                                                  nEpoch, batchSize );
+                                                  nEpoch, batchSize,0);
     ledg{i} = strcat('eta = ', num2str(eta(i)));
     display(['Temps pour eta = ', num2str(eta(i))]);
     toc;

@@ -3,11 +3,11 @@ clear;clc;close all
 patchSize = 3;
 step      = 8;
 minDist   = 0.8;
-eta       = 0.06;
-nEpoch    = 3000;
+eta       = 0.05;
+nEpoch    = 5000;
 %% Création des bases de données
 [X,D]     = ExtractData('images\Training\',patchSize,step,minDist);
-batchSize = [10:10:size(X,1) size(X,1)];
+batchSize = [1 20 40 60 size(X,1)];
 % Blanchir les données si nécessaire
 %% Création du réseau de neurones
 MLP     = myMLP;
@@ -21,7 +21,7 @@ Y      = zeros(size(X,1),length(eta));
 for i = 1 : length(batchSize);
     tic;
     [MLPExp1(i), MSE(:,i), Y(:,i)] = Training( MLP, X, D, eta,...
-                                                  nEpoch, batchSize(i) );
+                                                  nEpoch, batchSize(i),0 );
     ledg{i} = strcat('batch size = ', num2str(batchSize(i)));
     display(['Temps batch size = ', num2str(batchSize(i))]);
     toc;
@@ -37,4 +37,4 @@ legend(ledg);
 title('MSE');
 
 %% Visulaliser le résultat
-ViewNetworkResult(MLPExp1, patchSize);
+%ViewNetworkResult(MLPExp1, patchSize);
